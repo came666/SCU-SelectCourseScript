@@ -2,6 +2,7 @@ import requests
 import json
 import time
 import os
+import hashlib
 from bs4 import BeautifulSoup
 # import cv2
 # import pytesseract
@@ -73,11 +74,15 @@ class Login(object):
         # files = {'image_file': ('Logincap.jpg', f, 'application')}
         # vercode = self.session.post(url=self.reco,files=files).text
         # f.close()
-
+        passwd = passwd.encode(encoding='utf-8')
+        hl = hashlib.md5()
+        hl.update(passwd)
+        passwd = hl.hexdigest()
         post_data = {
             'j_username':username,
             'j_password':passwd,
-            'j_captcha':str(vercode)
+            'j_captcha':str(vercode),
+            '_spring_security_remember_me': 'on'
         }
 
         response = self.session.get(self.login_url,headers = self.headers)
@@ -369,7 +374,7 @@ class Login(object):
             sjdd = course[i]["sjdd"]
             
 
-            kechengID = '2018-2019-2-1_'+kch+'_'+kxh 
+            kechengID = '2019-2020-2-1_'+kch+'_'+kxh 
             teacher = course[i]["skjs"]
             # "教师:" + teacher + " "+coursepos
 
@@ -420,7 +425,7 @@ class Login(object):
             kechengming = course[i]["kcm"]
             kch = course[i]["kch"]
             kxh = course[i]["kxh"]
-            kechengID = kcID + '_' + kechengh + '_2019-2020-1-1'
+            kechengID = kcID + '_' + kechengh + '_2019-2020-2-1'
 
             teacher = course[i]["skjs"]
             if (kechengh==str(kxh)):
